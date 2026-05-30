@@ -9,72 +9,88 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Cairo',sans-serif;background:#07071a;min-height:100vh;overflow-x:hidden}
 
-/* الصورة كامل الصفحة */
-.page-img{
-  display:block;width:100%;max-width:1400px;margin:0 auto;
+.page-wrap{
   position:relative;
+  width:100%;
+  max-width:1400px;
+  margin:0 auto;
+  display:block;
 }
-.page-img img{width:100%;display:block}
+.page-wrap img{
+  width:100%;
+  display:block;
+}
 
-/* طبقة الأزرار فوق الصورة */
+/* طبقة الأزرار - تغطي الصورة كاملة */
 .btns-layer{
   position:absolute;
-  bottom:0;left:0;right:0;top:0;
+  inset:0;
   pointer-events:none;
 }
 
-/* الأزرار الثلاثة - مواضعها مضبوطة على الصورة */
-.btn-pdf,
-.btn-app,
-.btn-book{
+/* الأزرار الثلاثة — مضبوطة على مواضع الأزرار في الصورة */
+/* نسب مئوية: left/right = أفقي، bottom = رأسي من الأسفل، width/height = الحجم */
+
+/* زر "احصل على ملف جولة" — يسار الصفحة */
+.btn-pdf{
   position:absolute;
-  pointer-events:all;
-  cursor:pointer;
+  left:2.2%;
+  bottom:12.5%;
+  width:22.5%;
+  height:5.5%;
   background:transparent;
   border:none;
-  width:0;height:0;
-  /* نجعل المساحة كاملة تغطي زر الصورة */
-}
-
-/* زر ملف جولة - يسار */
-.btn-pdf{
-  bottom:5.5%;left:2%;
-  width:24%;height:8%;
+  cursor:pointer;
+  pointer-events:all;
   border-radius:8px;
 }
 
-/* زر اشترك الآن - وسط */
+/* زر "اشترك الآن" — وسط الصفحة */
 .btn-app{
-  bottom:5.5%;left:27%;
-  width:46%;height:8%;
+  position:absolute;
+  left:26.5%;
+  bottom:12.5%;
+  width:47%;
+  height:5.5%;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+  pointer-events:all;
   border-radius:8px;
 }
 
-/* زر وصفات جولة - يمين */
+/* زر "احصل على كتاب جولة" — يمين الصفحة */
 .btn-book{
-  bottom:5.5%;right:2%;
-  width:24%;height:8%;
+  position:absolute;
+  right:2.2%;
+  bottom:12.5%;
+  width:22.5%;
+  height:5.5%;
+  background:transparent;
+  border:none;
+  cursor:pointer;
+  pointer-events:all;
   border-radius:8px;
 }
 
-/* زر AI السري في الفوتر */
+/* زر AI السري في الفوتر — يمين أسفل */
 .btn-ai{
   position:absolute;
-  pointer-events:all;
-  cursor:pointer;
+  right:1%;
+  bottom:1%;
+  width:11%;
+  height:6%;
   background:transparent;
   border:none;
-  bottom:0.5%;
-  right:1%;
-  width:12%;
-  height:5%;
+  cursor:pointer;
+  pointer-events:all;
   opacity:0;
 }
 
-/* المودال */
+/* ── المودال ── */
 .modal-bg{
   display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,0.82);z-index:200;
+  background:rgba(0,0,0,0.82);z-index:300;
   backdrop-filter:blur(10px);
   align-items:center;justify-content:center;
 }
@@ -91,7 +107,7 @@ body{font-family:'Cairo',sans-serif;background:#07071a;min-height:100vh;overflow
   width:30px;height:30px;border-radius:50%;font-size:15px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
 }
-.modal-title{font-size:20px;font-weight:900;margin-bottom:6px;text-align:center}
+.modal-title{font-size:20px;font-weight:900;margin-bottom:6px;text-align:center;color:#fff}
 .modal-sub{font-size:12px;color:rgba(255,255,255,0.5);text-align:center;margin-bottom:20px}
 
 .bank-box{
@@ -99,10 +115,9 @@ body{font-family:'Cairo',sans-serif;background:#07071a;min-height:100vh;overflow
   border-radius:12px;padding:14px;margin-bottom:18px;
 }
 .bank-title{font-size:11px;color:#00d4ff;font-weight:700;margin-bottom:8px}
-.bank-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:0.5px solid rgba(255,255,255,0.06)}
+.bank-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:0.5px solid rgba(255,255,255,0.06);color:#fff}
 .bank-row:last-child{border-bottom:none}
 .bank-row span:first-child{color:rgba(255,255,255,0.5)}
-.bank-row span:last-child{font-weight:700}
 .price-highlight{color:#ff2d87}
 
 .form-lbl{display:block;font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:5px;font-weight:600}
@@ -123,49 +138,52 @@ body{font-family:'Cairo',sans-serif;background:#07071a;min-height:100vh;overflow
 .form-submit:hover{opacity:0.88}
 .form-note{font-size:11px;color:rgba(255,255,255,0.35);text-align:center;margin-top:9px}
 
-/* success */
 .success-view{display:none;text-align:center;padding:16px 0}
 .success-view.show{display:block}
-.success-icon{width:64px;height:64px;border-radius:50%;background:rgba(29,158,117,0.12);border:2px solid #1D9E75;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;animation:pulse 2s infinite}
+.success-icon{
+  width:64px;height:64px;border-radius:50%;
+  background:rgba(29,158,117,0.12);border:2px solid #1D9E75;
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;margin:0 auto 16px;animation:pulse 2s infinite;
+}
 @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(29,158,117,0.3)}50%{box-shadow:0 0 0 10px rgba(29,158,117,0)}}
+.success-title{font-size:20px;font-weight:900;margin-bottom:10px;color:#fff}
+.success-sub{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.7}
 .success-email{color:#00d4ff;font-weight:700}
 .close-btn{
   width:100%;background:rgba(255,255,255,0.07);color:#fff;border:none;
-  border-radius:50px;padding:12px;font-family:'Cairo',sans-serif;font-size:14px;
-  font-weight:700;cursor:pointer;margin-top:12px;
+  border-radius:50px;padding:12px;font-family:'Cairo',sans-serif;
+  font-size:14px;font-weight:700;cursor:pointer;margin-top:12px;
 }
 </style>
 </head>
 <body>
 
-<div class="page-img">
-  <img src="pic/hero.png" alt="جولة">
+<div class="page-wrap">
+  <img src="pic/hero.png" alt="جولة" id="hero-img">
 
   <div class="btns-layer">
-
-    <!-- زر ملف جولة -->
+    <!-- زر احصل على ملف جولة -->
     <button class="btn-pdf" onclick="openModal('pdf')"></button>
 
     <!-- زر اشترك الآن -->
     <button class="btn-app" onclick="openModal('app')"></button>
 
-    <!-- زر وصفات جولة -->
+    <!-- زر احصل على كتاب جولة -->
     <button class="btn-book" onclick="openModal('book')"></button>
 
     <!-- زر AI السري → لوحة الأدمن -->
     <button class="btn-ai" onclick="window.location.href='admin/index.html'"></button>
-
   </div>
 </div>
 
-<!-- مودال الطلب -->
+<!-- مودال -->
 <div class="modal-bg" id="modal" onclick="handleBg(event)">
   <div class="modal">
     <button class="modal-close" onclick="closeModal()">✕</button>
 
-    <!-- نموذج -->
     <div id="form-view">
-      <div class="modal-title" id="modal-title">اشترك في جولة</div>
+      <div class="modal-title" id="modal-title">اشتراك تطبيق جولة</div>
       <div class="modal-sub">أرسل الطلب وسيصلك الكود على إيميلك خلال دقائق</div>
 
       <div class="bank-box">
@@ -190,11 +208,10 @@ body{font-family:'Cairo',sans-serif;background:#07071a;min-height:100vh;overflow
       <div class="form-note">سيصلك كود التفعيل بعد التحقق من الدفع ✓</div>
     </div>
 
-    <!-- نجاح -->
     <div class="success-view" id="success-view">
       <div class="success-icon">✓</div>
-      <div style="font-size:20px;font-weight:900;margin-bottom:10px">تم إرسال طلبك!</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.7">
+      <div class="success-title">تم إرسال طلبك!</div>
+      <div class="success-sub">
         سيصلك كود التفعيل على<br>
         <span class="success-email" id="s-email"></span><br>
         خلال دقائق بعد التحقق من الدفع
@@ -213,15 +230,15 @@ const plans={
   pdf:{title:'ملف جولة — تمارين ووجبات',price:'14 ريال'},
   book:{title:'وصفات جولة — كتاب الوصفات',price:'69 ريال'}
 };
-let plan='app';
+let currentPlan='app';
 
 function openModal(p){
-  plan=p;
+  currentPlan=p;
   document.getElementById('modal-title').textContent=plans[p].title;
   document.getElementById('modal-price').textContent=plans[p].price;
-  document.getElementById('modal').classList.add('open');
   document.getElementById('form-view').style.display='block';
   document.getElementById('success-view').classList.remove('show');
+  document.getElementById('modal').classList.add('open');
 }
 function closeModal(){
   document.getElementById('modal').classList.remove('open');
@@ -242,15 +259,18 @@ async function submitOrder(){
     const res=await fetch(SB_URL+'/rest/v1/store_orders',{
       method:'POST',
       headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
-      body:JSON.stringify({name,email,receipt_number:receipt,plan,status:'pending',created_at:new Date().toISOString()})
+      body:JSON.stringify({name,email,receipt_number:receipt,plan:currentPlan,status:'pending',created_at:new Date().toISOString()})
     });
     if(res.ok||res.status===201){
       document.getElementById('form-view').style.display='none';
       document.getElementById('s-email').textContent=email;
       document.getElementById('success-view').classList.add('show');
-    }else{alert('حدث خطأ، حاول مجدداً');}
-  }catch{alert('تعذر الاتصال، تحقق من الإنترنت');}
-
+    }else{
+      alert('حدث خطأ، حاول مجدداً');
+    }
+  }catch{
+    alert('تعذر الاتصال، تحقق من الإنترنت');
+  }
   btn.textContent='أرسل الطلب';
 }
 </script>
