@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دخول الأدمن — جولة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #070714;
+    --purple: #7b2fff;
+    --pink: #ff2d87;
+    --cyan: #00d4ff;
+    --card-border: rgba(255,255,255,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--bg);
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* خلفية متحركة */
+  .bg-orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    animation: drift 8s ease-in-out infinite alternate;
+  }
+
+  .orb1 {
+    width: 400px; height: 400px;
+    background: rgba(123,47,255,0.15);
+    top: -100px; right: -100px;
+    animation-delay: 0s;
+  }
+
+  .orb2 {
+    width: 350px; height: 350px;
+    background: rgba(255,45,135,0.1);
+    bottom: -80px; left: -80px;
+    animation-delay: 3s;
+  }
+
+  .orb3 {
+    width: 250px; height: 250px;
+    background: rgba(0,212,255,0.06);
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    animation-delay: 1.5s;
+  }
+
+  @keyframes drift {
+    from { transform: translate(0,0) scale(1); }
+    to   { transform: translate(30px,20px) scale(1.1); }
+  }
+
+  /* grid خلفية */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(123,47,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(123,47,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  /* البطاقة */
+  .card {
+    position: relative;
+    z-index: 1;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(123,47,255,0.25);
+    border-radius: 28px;
+    padding: 48px 40px 40px;
+    width: 90%;
+    max-width: 420px;
+    backdrop-filter: blur(20px);
+    animation: cardIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: scale(0.88) translateY(30px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* شريط علوي ملون */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 20px; right: 20px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--purple), var(--pink), var(--cyan));
+    border-radius: 0 0 4px 4px;
+  }
+
+  .logo {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: 5px;
+    background: linear-gradient(90deg, var(--cyan), var(--purple), var(--pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+  }
+
+  .logo-sub {
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 2px;
+    margin-bottom: 36px;
+  }
+
+  .lock-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 16px;
+    background: rgba(123,47,255,0.12);
+    border: 1px solid rgba(123,47,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px;
+    font-size: 24px;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+    position: relative;
+  }
+
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+  }
+
+  .input-wrap {
+    position: relative;
+  }
+
+  .input-icon {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  .form-input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 13px 42px 13px 16px;
+    color: #fff;
+    font-family: 'Cairo', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+    direction: rtl;
+  }
+
+  .form-input:focus {
+    border-color: rgba(123,47,255,0.6);
+    background: rgba(123,47,255,0.06);
+    box-shadow: 0 0 0 3px rgba(123,47,255,0.12);
+  }
+
+  .form-input::placeholder { color: rgba(255,255,255,0.2); }
+
+  /* زر إظهار الباسورد */
+  .toggle-pass {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.35);
+    cursor: pointer;
+    font-size: 15px;
+    padding: 0;
+    transition: color 0.2s;
+  }
+
+  .toggle-pass:hover { color: rgba(255,255,255,0.7); }
+
+  /* زر الدخول */
+  .btn-login {
+    width: 100%;
+    background: linear-gradient(135deg, var(--purple), var(--pink));
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 15px;
+    font-family: 'Cairo', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: opacity 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-login::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+  }
+
+  .btn-login:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-login:active { transform: scale(0.98); }
+  .btn-login:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* رسالة خطأ */
+  .error-msg {
+    display: none;
+    background: rgba(255,45,135,0.1);
+    border: 1px solid rgba(255,45,135,0.3);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 13px;
+    color: #ff6fa8;
+    text-align: center;
+    margin-top: 14px;
+    animation: shake 0.4s ease;
+  }
+
+  .error-msg.show { display: block; }
+
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%,60% { transform: translateX(-6px); }
+    40%,80% { transform: translateX(6px); }
+  }
+
+  /* رسالة تحميل */
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .footer-note {
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.18);
+    margin-top: 28px;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orb orb1"></div>
+<div class="bg-orb orb2"></div>
+<div class="bg-orb orb3"></div>
+
+<div class="card">
+  <div class="logo">JAWLA</div>
+  <div class="logo-sub">ADMIN PANEL</div>
+
+  <div class="lock-icon">🔐</div>
+
+  <div class="form-group">
+    <label class="form-label">اسم المستخدم</label>
+    <div class="input-wrap">
+      <span class="input-icon">👤</span>
+      <input
+        type="text"
+        class="form-input"
+        id="username"
+        placeholder="admin"
+        autocomplete="off"
+        onkeydown="if(event.key==='Enter')login()"
+      >
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">كلمة المرور</label>
+    <div class="input-wrap">
+      <span class="input-icon">🔑</span>
+      <input
+        type="password"
+        class="form-input"
+        id="password"
+        placeholder="••••••••"
+        autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')login()"
+        id="password"
+      >
+      <button class="toggle-pass" onclick="togglePassword()" type="button" title="إظهار/إخفاء">
+        <span id="eye-icon">👁</span>
+      </button>
+    </div>
+  </div>
+
+  <button class="btn-login" id="login-btn" onclick="login()">
+    <span id="btn-text">دخول</span>
+  </button>
+
+  <div class="error-msg" id="error-msg">
+    اسم المستخدم أو كلمة المرور غلط
+  </div>
+
+  <div class="footer-note">JAWLAFIT · ADMIN ACCESS ONLY</div>
+</div>
+
+<script>
+  const SUPABASE_URL = 'https://cbfedptmwmhabobzlmqb.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_eS31bRfl_RPCtGwKoJXCZg_ldCK37ln';
+
+  function togglePassword() {
+    const input = document.getElementById('password');
+    const icon  = document.getElementById('eye-icon');
+    if (input.type === 'password') {
+      input.type = 'text';
+      icon.textContent = '🙈';
+    } else {
+      input.type = 'password';
+      icon.textContent = '👁';
+    }
+  }
+
+  async function login() {
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const btn      = document.getElementById('login-btn');
+    const btnText  = document.getElementById('btn-text');
+    const errorMsg = document.getElementById('error-msg');
+
+    if (!username || !password) {
+      showError('يرجى ملء جميع الحقول');
+      return;
+    }
+
+    btn.disabled = true;
+    btnText.innerHTML = '<span class="spinner"></span>';
+    errorMsg.classList.remove('show');
+
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/admin?username=eq.${encodeURIComponent(username)}&select=*`,
+        {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        }
+      );
+
+      const data = await res.json();
+
+      if (data && data.length > 0 && data[0].password === password) {
+        btnText.textContent = '✓ جاري الدخول...';
+        btn.style.background = 'linear-gradient(135deg,#1D9E75,#0F6E56)';
+        setTimeout(() => {
+          sessionStorage.setItem('jawla_admin','1');
+        window.location.href = 'dashboard.html';
+        }, 800);
+      } else {
+        showError('اسم المستخدم أو كلمة المرور غلط');
+        btn.disabled = false;
+        btnText.textContent = 'دخول';
+      }
+    } catch(e) {
+      showError('تعذر الاتصال، تحقق من الإنترنت');
+      btn.disabled = false;
+      btnText.textContent = 'دخول';
+    }
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('error-msg');
+    el.textContent = msg;
+    el.classList.remove('show');
+    void el.offsetWidth;
+    el.classList.add('show');
+  }
+
+  document.getElementById('username').focus();
+</script>
+</body>
+</html>

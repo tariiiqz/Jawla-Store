@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جولة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo',sans-serif;background:#07071a;min-height:100vh;overflow-x:hidden}
+
+/* الصورة كامل الصفحة */
+.page-img{
+  display:block;width:100%;max-width:1400px;margin:0 auto;
+  position:relative;
+}
+.page-img img{width:100%;display:block}
+
+/* طبقة الأزرار فوق الصورة */
+.btns-layer{
+  position:absolute;
+  bottom:0;left:0;right:0;top:0;
+  pointer-events:none;
+}
+
+/* الأزرار الثلاثة - مواضعها مضبوطة على الصورة */
+.btn-pdf,
+.btn-app,
+.btn-book{
+  position:absolute;
+  pointer-events:all;
+  cursor:pointer;
+  background:transparent;
+  border:none;
+  width:0;height:0;
+  /* نجعل المساحة كاملة تغطي زر الصورة */
+}
+
+/* زر ملف جولة - يسار */
+.btn-pdf{
+  bottom:5.5%;left:2%;
+  width:24%;height:8%;
+  border-radius:8px;
+}
+
+/* زر اشترك الآن - وسط */
+.btn-app{
+  bottom:5.5%;left:27%;
+  width:46%;height:8%;
+  border-radius:8px;
+}
+
+/* زر وصفات جولة - يمين */
+.btn-book{
+  bottom:5.5%;right:2%;
+  width:24%;height:8%;
+  border-radius:8px;
+}
+
+/* زر AI السري في الفوتر */
+.btn-ai{
+  position:absolute;
+  pointer-events:all;
+  cursor:pointer;
+  background:transparent;
+  border:none;
+  bottom:0.5%;
+  right:1%;
+  width:12%;
+  height:5%;
+  opacity:0;
+}
+
+/* المودال */
+.modal-bg{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.82);z-index:200;
+  backdrop-filter:blur(10px);
+  align-items:center;justify-content:center;
+}
+.modal-bg.open{display:flex}
+.modal{
+  background:#0f0f2a;border:1px solid rgba(123,47,255,0.35);
+  border-radius:22px;padding:32px;width:90%;max-width:460px;
+  position:relative;animation:mIn 0.3s ease;
+}
+@keyframes mIn{from{opacity:0;transform:scale(0.94) translateY(18px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-close{
+  position:absolute;top:14px;left:14px;
+  background:rgba(255,255,255,0.07);border:none;color:#fff;
+  width:30px;height:30px;border-radius:50%;font-size:15px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+.modal-title{font-size:20px;font-weight:900;margin-bottom:6px;text-align:center}
+.modal-sub{font-size:12px;color:rgba(255,255,255,0.5);text-align:center;margin-bottom:20px}
+
+.bank-box{
+  background:rgba(123,47,255,0.1);border:1px solid rgba(123,47,255,0.22);
+  border-radius:12px;padding:14px;margin-bottom:18px;
+}
+.bank-title{font-size:11px;color:#00d4ff;font-weight:700;margin-bottom:8px}
+.bank-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:0.5px solid rgba(255,255,255,0.06)}
+.bank-row:last-child{border-bottom:none}
+.bank-row span:first-child{color:rgba(255,255,255,0.5)}
+.bank-row span:last-child{font-weight:700}
+.price-highlight{color:#ff2d87}
+
+.form-lbl{display:block;font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:5px;font-weight:600}
+.form-inp{
+  width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);
+  border-radius:11px;padding:11px 14px;color:#fff;font-family:'Cairo',sans-serif;
+  font-size:13px;outline:none;margin-bottom:12px;transition:border-color 0.2s;
+}
+.form-inp:focus{border-color:rgba(123,47,255,0.55)}
+.form-inp::placeholder{color:rgba(255,255,255,0.25)}
+
+.form-submit{
+  width:100%;background:linear-gradient(135deg,#7b2fff,#ff2d87);
+  color:#fff;border:none;border-radius:50px;padding:13px;
+  font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;cursor:pointer;
+  margin-top:4px;transition:opacity 0.2s;
+}
+.form-submit:hover{opacity:0.88}
+.form-note{font-size:11px;color:rgba(255,255,255,0.35);text-align:center;margin-top:9px}
+
+/* success */
+.success-view{display:none;text-align:center;padding:16px 0}
+.success-view.show{display:block}
+.success-icon{width:64px;height:64px;border-radius:50%;background:rgba(29,158,117,0.12);border:2px solid #1D9E75;display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 16px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(29,158,117,0.3)}50%{box-shadow:0 0 0 10px rgba(29,158,117,0)}}
+.success-email{color:#00d4ff;font-weight:700}
+.close-btn{
+  width:100%;background:rgba(255,255,255,0.07);color:#fff;border:none;
+  border-radius:50px;padding:12px;font-family:'Cairo',sans-serif;font-size:14px;
+  font-weight:700;cursor:pointer;margin-top:12px;
+}
+</style>
+</head>
+<body>
+
+<div class="page-img">
+  <img src="pic/hero.png" alt="جولة">
+
+  <div class="btns-layer">
+
+    <!-- زر ملف جولة -->
+    <button class="btn-pdf" onclick="openModal('pdf')"></button>
+
+    <!-- زر اشترك الآن -->
+    <button class="btn-app" onclick="openModal('app')"></button>
+
+    <!-- زر وصفات جولة -->
+    <button class="btn-book" onclick="openModal('book')"></button>
+
+    <!-- زر AI السري → لوحة الأدمن -->
+    <button class="btn-ai" onclick="window.location.href='admin/index.html'"></button>
+
+  </div>
+</div>
+
+<!-- مودال الطلب -->
+<div class="modal-bg" id="modal" onclick="handleBg(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <!-- نموذج -->
+    <div id="form-view">
+      <div class="modal-title" id="modal-title">اشترك في جولة</div>
+      <div class="modal-sub">أرسل الطلب وسيصلك الكود على إيميلك خلال دقائق</div>
+
+      <div class="bank-box">
+        <div class="bank-title">معلومات التحويل البنكي</div>
+        <div class="bank-row"><span>اسم المستفيد</span><span>Jawlafit</span></div>
+        <div class="bank-row"><span>رقم الآيبان</span><span style="direction:ltr;font-size:11px">SA•• •••• •••• ••••</span></div>
+        <div class="bank-row"><span>المبلغ</span><span class="price-highlight" id="modal-price">30 ريال</span></div>
+      </div>
+
+      <label class="form-lbl">الاسم الكامل</label>
+      <input type="text" class="form-inp" id="f-name" placeholder="محمد العتيبي">
+
+      <label class="form-lbl">البريد الإلكتروني</label>
+      <input type="email" class="form-inp" id="f-email" placeholder="example@gmail.com" dir="ltr">
+
+      <label class="form-lbl">رقم إيصال التحويل</label>
+      <input type="text" class="form-inp" id="f-receipt" placeholder="123456789" dir="ltr">
+
+      <button class="form-submit" onclick="submitOrder()">
+        <span id="btn-txt">أرسل الطلب</span>
+      </button>
+      <div class="form-note">سيصلك كود التفعيل بعد التحقق من الدفع ✓</div>
+    </div>
+
+    <!-- نجاح -->
+    <div class="success-view" id="success-view">
+      <div class="success-icon">✓</div>
+      <div style="font-size:20px;font-weight:900;margin-bottom:10px">تم إرسال طلبك!</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.7">
+        سيصلك كود التفعيل على<br>
+        <span class="success-email" id="s-email"></span><br>
+        خلال دقائق بعد التحقق من الدفع
+      </div>
+      <button class="close-btn" onclick="closeModal()">حسناً ✓</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SB_URL='https://cbfedptmwmhabobzlmqb.supabase.co';
+const SB_KEY='sb_publishable_eS31bRfl_RPCtGwKoJXCZg_ldCK37ln';
+
+const plans={
+  app:{title:'اشتراك تطبيق جولة الكامل',price:'30 ريال شهرياً'},
+  pdf:{title:'ملف جولة — تمارين ووجبات',price:'14 ريال'},
+  book:{title:'وصفات جولة — كتاب الوصفات',price:'69 ريال'}
+};
+let plan='app';
+
+function openModal(p){
+  plan=p;
+  document.getElementById('modal-title').textContent=plans[p].title;
+  document.getElementById('modal-price').textContent=plans[p].price;
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('form-view').style.display='block';
+  document.getElementById('success-view').classList.remove('show');
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  ['f-name','f-email','f-receipt'].forEach(id=>document.getElementById(id).value='');
+}
+function handleBg(e){if(e.target===document.getElementById('modal'))closeModal();}
+
+async function submitOrder(){
+  const name=document.getElementById('f-name').value.trim();
+  const email=document.getElementById('f-email').value.trim();
+  const receipt=document.getElementById('f-receipt').value.trim();
+  if(!name||!email||!receipt){alert('يرجى ملء جميع الحقول');return;}
+
+  const btn=document.getElementById('btn-txt');
+  btn.textContent='⏳ جاري الإرسال...';
+
+  try{
+    const res=await fetch(SB_URL+'/rest/v1/store_orders',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'return=minimal'},
+      body:JSON.stringify({name,email,receipt_number:receipt,plan,status:'pending',created_at:new Date().toISOString()})
+    });
+    if(res.ok||res.status===201){
+      document.getElementById('form-view').style.display='none';
+      document.getElementById('s-email').textContent=email;
+      document.getElementById('success-view').classList.add('show');
+    }else{alert('حدث خطأ، حاول مجدداً');}
+  }catch{alert('تعذر الاتصال، تحقق من الإنترنت');}
+
+  btn.textContent='أرسل الطلب';
+}
+</script>
+</body>
+</html>
