@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جولة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Cairo',sans-serif;
+  background:#07071a;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  position:relative;
+  overflow:hidden;
+}
+
+/* خلفية */
+.orb{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none}
+.orb1{width:400px;height:400px;background:rgba(123,47,255,0.12);top:-100px;right:-100px}
+.orb2{width:350px;height:350px;background:rgba(255,45,135,0.08);bottom:-80px;left:-80px}
+
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:linear-gradient(rgba(123,47,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(123,47,255,0.03) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none;
+}
+
+.logo{
+  font-size:32px;font-weight:900;letter-spacing:5px;
+  background:linear-gradient(90deg,#00d4ff,#7b2fff,#ff2d87);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:8px;position:relative;z-index:1;
+}
+.subtitle{font-size:14px;color:rgba(255,255,255,0.4);margin-bottom:48px;position:relative;z-index:1}
+
+.cards{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1}
+
+.card{
+  background:rgba(255,255,255,0.04);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:24px;
+  padding:40px 36px;
+  width:200px;
+  text-align:center;
+  cursor:pointer;
+  text-decoration:none;
+  transition:all 0.3s;
+  position:relative;
+  overflow:hidden;
+}
+
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--c1),var(--c2));
+  opacity:0;transition:opacity 0.3s;
+}
+
+.card:hover{
+  border-color:rgba(123,47,255,0.4);
+  transform:translateY(-6px);
+  background:rgba(123,47,255,0.08);
+}
+.card:hover::before{opacity:1}
+
+.card-icon{font-size:52px;margin-bottom:16px;display:block}
+.card-title{font-size:18px;font-weight:900;color:#fff;margin-bottom:6px}
+.card-sub{font-size:12px;color:rgba(255,255,255,0.4);line-height:1.5}
+
+.card-mobile{--c1:#7b2fff;--c2:#ff2d87}
+.card-desktop{--c1:#00d4ff;--c2:#7b2fff}
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<div class="logo">JAWLA</div>
+<div class="subtitle">اختر نوع جهازك للمتابعة</div>
+
+<div class="cards">
+  <a href="index.html" class="card card-mobile">
+    <span class="card-icon">📱</span>
+    <div class="card-title">جوال</div>
+    <div class="card-sub">تصميم مخصص<br>للجوال والآيفون</div>
+  </a>
+  <a href="desktop.html" class="card card-desktop">
+    <span class="card-icon">🖥️</span>
+    <div class="card-title">كمبيوتر</div>
+    <div class="card-sub">تصميم مخصص<br>لشاشة الكمبيوتر</div>
+  </a>
+</div>
+
+</body>
+</html>

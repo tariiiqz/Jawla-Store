@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>جولة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo',sans-serif;background:#07071a;display:flex;justify-content:center}
+
+.page-wrap{position:relative;width:100%;max-width:864px}
+.page-wrap img{width:100%;display:block}
+.btns-layer{position:absolute;inset:0;pointer-events:none}
+
+/* كل مربع كامل قابل للضغط */
+.card-btn{
+  position:absolute;
+  left:2%;width:96%;
+  background:transparent;border:none;cursor:pointer;
+  pointer-events:all;border-radius:16px;
+}
+
+/* مربع 1: ملف جولة */
+.card-pdf{ top:26.5%; height:26.5%; }
+
+/* مربع 2: اشتراك التطبيق */
+.card-app{ top:47%; height:22.5%; }
+
+/* مربع 3: وصفات جولة */
+.card-book{ top:70%; height:18.5%; }
+
+/* علامة AI سرية */
+.btn-ai{
+  position:absolute;left:57%;bottom:1.2%;
+  width:22%;height:4.5%;
+  background:transparent;border:none;cursor:pointer;pointer-events:all;opacity:0;
+}
+
+/* ── المودال ── */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:300;backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:16px}
+.modal-bg.open{display:flex}
+.modal{background:#0f0f2a;border:1px solid rgba(123,47,255,0.4);border-radius:22px;padding:28px;width:100%;max-width:440px;position:relative;animation:mIn 0.3s ease}
+@keyframes mIn{from{opacity:0;transform:scale(0.94) translateY(18px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-close{position:absolute;top:14px;left:14px;background:rgba(255,255,255,0.07);border:none;color:#fff;width:30px;height:30px;border-radius:50%;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+.modal-title{font-size:18px;font-weight:900;margin-bottom:4px;text-align:center;color:#fff}
+.modal-desc{font-size:13px;color:rgba(255,255,255,0.6);text-align:center;margin-bottom:16px;line-height:1.5}
+
+.bank-box{background:rgba(123,47,255,0.1);border:1px solid rgba(123,47,255,0.22);border-radius:12px;padding:13px;margin-bottom:16px}
+.bank-title{font-size:11px;color:#00d4ff;font-weight:700;margin-bottom:7px}
+.bank-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:0.5px solid rgba(255,255,255,0.06);color:#fff}
+.bank-row:last-child{border-bottom:none}
+.bank-row span:first-child{color:rgba(255,255,255,0.5)}
+.price-hl{color:#ff2d87}
+
+.lbl{display:block;font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:5px;font-weight:600}
+.inp{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.09);border-radius:11px;padding:11px 13px;color:#fff;font-family:'Cairo',sans-serif;font-size:13px;outline:none;margin-bottom:11px;transition:border-color 0.2s}
+.inp:focus{border-color:rgba(123,47,255,0.55)}
+.inp::placeholder{color:rgba(255,255,255,0.25)}
+
+.submit-btn{width:100%;background:linear-gradient(135deg,#7b2fff,#ff2d87);color:#fff;border:none;border-radius:50px;padding:13px;font-family:'Cairo',sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-top:4px;transition:opacity 0.2s}
+.submit-btn:hover{opacity:0.88}
+.form-note{font-size:11px;color:rgba(255,255,255,0.35);text-align:center;margin-top:8px}
+
+.success{display:none;text-align:center;padding:14px 0}
+.success.show{display:block}
+.s-icon{width:62px;height:62px;border-radius:50%;background:rgba(29,158,117,0.12);border:2px solid #1D9E75;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 14px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(29,158,117,0.3)}50%{box-shadow:0 0 0 10px rgba(29,158,117,0)}}
+.s-email{color:#00d4ff;font-weight:700}
+.close-btn{width:100%;background:rgba(255,255,255,0.07);color:#fff;border:none;border-radius:50px;padding:12px;font-family:'Cairo',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:12px}
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+  <img src="pic/hero.png" alt="جولة">
+  <div class="btns-layer">
+    <!-- كل مربع كامل قابل للضغط -->
+    <button class="card-btn card-pdf"  onclick="openModal('pdf')"></button>
+    <button class="card-btn card-app"  onclick="openModal('app')"></button>
+    <button class="card-btn card-book" onclick="openModal('book')"></button>
+    <!-- علامة AI سرية -->
+    <button class="btn-ai" onclick="window.location.href='admin/index.html'"></button>
+  </div>
+</div>
+
+<!-- مودال -->
+<div class="modal-bg" id="modal" onclick="handleBg(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <div id="form-view">
+      <div class="modal-title" id="modal-title"></div>
+      <div class="modal-desc"  id="modal-desc"></div>
+
+      <div class="bank-box">
+        <div class="bank-title">معلومات التحويل البنكي</div>
+        <div class="bank-row"><span>اسم المستفيد</span><span>Jawlafit</span></div>
+        <div class="bank-row"><span>رقم الآيبان</span><span style="direction:ltr;font-size:11px">SA•• •••• •••• ••••</span></div>
+        <div class="bank-row"><span>المبلغ</span><span class="price-hl" id="modal-price"></span></div>
+      </div>
+
+      <label class="lbl">الاسم الكامل</label>
+      <input type="text"  class="inp" id="f-name"    placeholder="محمد العتيبي">
+      <label class="lbl">البريد الإلكتروني</label>
+      <input type="email" class="inp" id="f-email"   placeholder="example@gmail.com" dir="ltr">
+      <label class="lbl">رقم إيصال التحويل</label>
+      <input type="text"  class="inp" id="f-receipt" placeholder="123456789" dir="ltr">
+
+      <button class="submit-btn" onclick="submitOrder()">
+        <span id="btn-txt"></span>
+      </button>
+      <div class="form-note">سيصلك كود التفعيل بعد التحقق من الدفع ✓</div>
+    </div>
+
+    <div class="success" id="success-view">
+      <div class="s-icon">✓</div>
+      <div style="font-size:19px;font-weight:900;margin-bottom:10px;color:#fff">تم إرسال طلبك!</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.7">
+        سيصلك على<br><span class="s-email" id="s-email"></span><br>خلال دقائق بعد التحقق من الدفع
+      </div>
+      <button class="close-btn" onclick="closeModal()">حسناً ✓</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SB='https://cbfedptmwmhabobzlmqb.supabase.co';
+const KEY='sb_publishable_eS31bRfl_RPCtGwKoJXCZg_ldCK37ln';
+
+const plans={
+  pdf:{ title:'ملف جولة', desc:'الحصول على كتاب جولة الشامل للتمارين والوجبات', btn:'احصل عليه الآن', price:'14 ريال' },
+  app:{ title:'اشتراك تطبيق جولة الكامل', desc:'الاشتراك في تطبيق جولة الشامل', btn:'اشترك الآن', price:'30 ريال شهرياً' },
+  book:{ title:'وصفات جولة', desc:'كتيب جولة للوجبات والوصفات', btn:'احصل عليه الآن', price:'69 ريال' }
+};
+let plan='app';
+
+function openModal(p){
+  plan=p;
+  const pl=plans[p];
+  document.getElementById('modal-title').textContent=pl.title;
+  document.getElementById('modal-desc').textContent=pl.desc;
+  document.getElementById('modal-price').textContent=pl.price;
+  document.getElementById('btn-txt').textContent=pl.btn;
+  document.getElementById('form-view').style.display='block';
+  document.getElementById('success-view').classList.remove('show');
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){
+  document.getElementById('modal').classList.remove('open');
+  ['f-name','f-email','f-receipt'].forEach(id=>document.getElementById(id).value='');
+}
+function handleBg(e){if(e.target===document.getElementById('modal'))closeModal();}
+
+async function submitOrder(){
+  const name=document.getElementById('f-name').value.trim();
+  const email=document.getElementById('f-email').value.trim();
+  const receipt=document.getElementById('f-receipt').value.trim();
+  if(!name||!email||!receipt){alert('يرجى ملء جميع الحقول');return;}
+  const btn=document.getElementById('btn-txt');
+  const orig=btn.textContent;
+  btn.textContent='⏳ جاري الإرسال...';
+  try{
+    const r=await fetch(SB+'/rest/v1/store_orders',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','apikey':KEY,'Authorization':'Bearer '+KEY,'Prefer':'return=minimal'},
+      body:JSON.stringify({name,email,receipt_number:receipt,plan,status:'pending',created_at:new Date().toISOString()})
+    });
+    if(r.ok||r.status===201){
+      document.getElementById('form-view').style.display='none';
+      document.getElementById('s-email').textContent=email;
+      document.getElementById('success-view').classList.add('show');
+    }else{alert('حدث خطأ، حاول مجدداً');}
+  }catch{alert('تعذر الاتصال، تحقق من الإنترنت');}
+  btn.textContent=orig;
+}
+</script>
+</body>
+</html>
