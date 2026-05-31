@@ -413,7 +413,7 @@ body.light .notif-btn:hover{color:#0d0d26}
     </div>
     <div class="table-card" style="overflow-x:auto">
       <table class="full-table" id="orders-table">
-        <thead><tr><th>#</th><th>الاسم</th><th>الإيميل</th><th>الباقة</th><th>الإيصال</th><th>الحالة</th><th>الوقت</th><th>إجراء</th></tr></thead>
+        <thead><tr><th>#</th><th>الاسم</th><th>الإيميل</th><th>الباقة</th><th>الإيصال</th><th>الكود المرسل</th><th>الحالة</th><th>الوقت</th><th>إجراء</th></tr></thead>
         <tbody id="orders-tbody"><tr><td colspan="8" style="text-align:center;padding:28px;color:rgba(255,255,255,0.4)">جاري التحميل...</td></tr></tbody>
       </table>
     </div>
@@ -595,6 +595,7 @@ function renderOrdersTable(list){
       <td style="font-size:11px;color:rgba(255,255,255,0.4)">${o.email||'—'}</td>
       <td><span class="plan-badge ${b.cls}">${pn[o.plan]||o.plan}</span></td>
       <td style="font-size:11px;direction:ltr">${o.receipt_number||'—'}</td>
+      <td style="font-family:monospace;font-size:11px;color:#00d4ff">${o.code_sent||'—'}</td>
       <td><span class="status-badge ${s.cls}">${s.label}</span></td>
       <td style="font-size:11px;color:rgba(255,255,255,0.35)">${t}</td>
       <td>${canSend?`<button class="send-code-btn" onclick="sendCode('${o.id}','${o.email}','${o.name||''}')">⚡ أرسل الكود</button>`:'<span style="font-size:11px;color:rgba(255,255,255,0.25)">—</span>'}</td>
@@ -626,6 +627,10 @@ async function sendCode(orderId,email,name){
     await fetch(`${SB}/rest/v1/pro_codes?id=eq.${code.id}`,{method:'PATCH',headers:{...H,'Prefer':'return=minimal'},body:JSON.stringify({used:true,used_by:email})});
     await fetch('https://jawlabot.tareqmj762.workers.dev/send-email',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,name,code:code.code})}).catch(()=>{});
     showToast(`✓ تم إرسال الكود ${code.code} إلى ${email}`);
+    // غيّر الزر لـ "تم الإرسال"
+    btn.textContent = '✓ تم الإرسال';
+    btn.style.background = 'linear-gradient(135deg,#1D9E75,#0F6E56)';
+    btn.disabled = true;
     await loadOrdersTable();
   }catch(e){showToast('حدث خطأ، حاول مجدداً','#ff2d87');btn.disabled=false;btn.textContent='⚡ أرسل الكود';}
 }
